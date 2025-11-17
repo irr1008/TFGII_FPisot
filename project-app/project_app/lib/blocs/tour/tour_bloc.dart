@@ -197,6 +197,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
       final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)
         ..remove(event.poi);
       // Comprobamos si el POI eliminado es la ubicación actual
+      // Comprobamos si el POI eliminado es la ubicación actual
       if (event.poi.name == 'current_location'.tr()) {
         log.i(
             'El POI eliminado es la ubicación actual. Cambiando isJoined a false.');
