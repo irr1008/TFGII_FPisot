@@ -51,15 +51,15 @@ Future<BitmapDescriptor> getNetworkImageMarker(String imageUrl) async {
     if (!uri.isAbsolute) {
       log.w(
           'getNetworkImageMarker: URL inválida, usando marcador predeterminado.');
-      return await getCustomMarker(); // Usa la imagen local como marcador predeterminado
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
     }
 
     final response = await Dio()
         .get(imageUrl, options: Options(responseType: ResponseType.bytes));
     if (response.statusCode != 200 || response.data == null) {
       log.e(
-          'getNetworkImageMarker: Fallo al descargar imagen, usando marcador local.');
-      return await getCustomMarker(); // Usa la imagen local como marcador predeterminado
+          'getNetworkImageMarker: Fallo al descargar imagen, usando marcador predeterminado.');
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
     }
 
     final codec = await ui.instantiateImageCodec(response.data,
@@ -72,14 +72,11 @@ Future<BitmapDescriptor> getNetworkImageMarker(String imageUrl) async {
         'getNetworkImageMarker: Marcador con imagen de red creado con éxito.');
     return BitmapDescriptor.bytes(markerBytes);
   } catch (e, stackTrace) {
-    log.e(
-        'getNetworkImageMarker: Error al cargar imagen desde la red, usando marcador local.',
-        error: e,
-        stackTrace: stackTrace);
-    return await getCustomMarker(); // Usa la imagen local como marcador predeterminado
+    log.e('getNetworkImageMarker: Error al cargar imagen desde la red',
+        error: e, stackTrace: stackTrace);
+    return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
   }
 }
-
 
 /// Crea una imagen circular con un borde alrededor.
 ///

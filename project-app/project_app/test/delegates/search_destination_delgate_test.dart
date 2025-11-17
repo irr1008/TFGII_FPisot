@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
 import 'package:project_app/blocs/tour/tour_bloc.dart';
 import 'package:project_app/blocs/map/map_bloc.dart';
 import 'package:project_app/delegates/delegates.dart';
@@ -11,9 +12,7 @@ import 'package:project_app/delegates/delegates.dart';
 import 'package:project_app/services/places_service.dart';
 
 class MockTourBloc extends Mock implements TourBloc {}
-
 class MockMapBloc extends Mock implements MapBloc {}
-
 class MockPlacesService extends Mock implements PlacesService {}
 
 void main() {
@@ -35,8 +34,7 @@ void main() {
   });
 
   group('SearchDestinationDelegate Tests', () {
-    testWidgets('Cierra el buscador cuando se presiona el botón de limpiar (X)',
-        (tester) async {
+    testWidgets('Limpia la búsqueda cuando se presiona el botón de limpiar', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -61,16 +59,14 @@ void main() {
       await tester.tap(find.byIcon(Icons.search));
       await tester.pumpAndSettle();
 
-      // Presiona el botón de limpiar (X)
+      searchDelegate.query = 'some place';
       await tester.tap(find.byIcon(Icons.clear));
       await tester.pumpAndSettle();
 
-      // Verifica que el buscador se haya cerrado
-      expect(find.byType(SearchDestinationDelegate), findsNothing);
+      expect(searchDelegate.query, isEmpty);
     });
 
-    testWidgets('Cierra el buscador cuando se presiona el botón de retroceso',
-        (tester) async {
+    testWidgets('Cierra el buscador cuando se presiona el botón de retroceso', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -101,5 +97,9 @@ void main() {
 
       expect(find.byType(SearchDestinationDelegate), findsNothing);
     });
+
+ 
+
+    
   });
 }
